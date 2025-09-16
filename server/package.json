@@ -1,0 +1,20 @@
+{
+  "name": "phone-app-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Basic contacts API for phone application",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.2.0",
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}

@@ -180,7 +180,18 @@ function SwipeQuiz({ adminMode }) {
       {status === 'loading' && <Typography>Loading questions...</Typography>}
       {status === 'error' && <Typography color="error">Failed to load questions.</Typography>}
       {!showAdmin && status === 'ready' && !current && (
-        <Typography>All done! Thanks for answering.</Typography>
+        <Box>
+          <Typography sx={{ mb: 2 }}>All done! Thanks for answering.</Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Button
+              variant="text"
+              disabled={index === 0}
+              onClick={() => { setIndex(i => Math.max(0, i - 1)); setDrag({ active: false, startX: 0, dx: 0 }) }}
+            >
+              Back
+            </Button>
+          </Box>
+        </Box>
       )}
       {!showAdmin && current && (
         <Box sx={{ position: 'relative', height: 220 }}>
