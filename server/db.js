@@ -22,6 +22,13 @@ CREATE TABLE IF NOT EXISTS questions (
 );
 `)
 
+// Add additional_info column if it doesn't exist
+try {
+  db.exec(`ALTER TABLE questions ADD COLUMN additional_info TEXT;`)
+} catch (e) {
+  // Column already exists, ignore error
+}
+
 db.exec(`
 CREATE TABLE IF NOT EXISTS answers (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -63,9 +70,9 @@ const statements = {
   listContacts: db.prepare('SELECT id, name, phone FROM contacts ORDER BY id ASC'),
   insertContact: db.prepare('INSERT INTO contacts (name, phone) VALUES (?, ?)'),
   deleteContact: db.prepare('DELETE FROM contacts WHERE id = ?'),
-  listQuestions: db.prepare('SELECT id, prompt, image_url AS imageUrl FROM questions ORDER BY id ASC'),
-  insertQuestion: db.prepare('INSERT INTO questions (prompt, image_url) VALUES (?, ?)'),
-  updateQuestion: db.prepare('UPDATE questions SET prompt = ?, image_url = ? WHERE id = ?'),
+  listQuestions: db.prepare('SELECT id, prompt, image_url AS imageUrl, additional_info AS additionalInfo FROM questions ORDER BY id ASC'),
+  insertQuestion: db.prepare('INSERT INTO questions (prompt, image_url, additional_info) VALUES (?, ?, ?)'),
+  updateQuestion: db.prepare('UPDATE questions SET prompt = ?, image_url = ?, additional_info = ? WHERE id = ?'),
   deleteQuestion: db.prepare('DELETE FROM questions WHERE id = ?'),
   upsertAnswer: db.prepare(`
     INSERT INTO answers (user_id, question_id, answer)
@@ -115,13 +122,13 @@ module.exports = {
   createContact,
   removeContact,
   getAllQuestions: () => statements.listQuestions.all(),
-  createQuestion: ({ prompt, imageUrl }) => {
-    const info = statements.insertQuestion.run(prompt, imageUrl || null)
-    return { id: Number(info.lastInsertRowid), prompt, imageUrl: imageUrl || null }
+  createQuestion: ({ prompt, imageUrl, additionalInfo }) => {
+    const info = statements.insertQuestion.run(prompt, imageUrl || null, additionalInfo || null)
+    return { id: Number(info.lastInsertRowid), prompt, imageUrl: imageUrl || null, additionalInfo: additionalInfo || null }
   },
-  updateQuestion: ({ id, prompt, imageUrl }) => {
-    statements.updateQuestion.run(prompt, imageUrl || null, id)
-    return { id, prompt, imageUrl: imageUrl || null }
+  updateQuestion: ({ id, prompt, imageUrl, additionalInfo }) => {
+    statements.updateQuestion.run(prompt, imageUrl || null, additionalInfo || null, id)
+    return { id, prompt, imageUrl: imageUrl || null, additionalInfo: additionalInfo || null }
   },
   deleteQuestion: (id) => {
     const res = statements.deleteQuestion.run(id)
