@@ -27,10 +27,11 @@ function AddQuestionForm({ onAdd }) {
   const canAdd = prompt.trim().length > 0;
   return (
     <Stack
-      spacing={1}
-      direction={{ xs: "column", sm: "row" }}
-      alignItems={{ sm: "center" }}
+      spacing={2}
+      direction="column"
+      sx={{ p: 2, border: "1px solid", borderColor: "divider", borderRadius: 1, bgcolor: "action.hover" }}
     >
+      <Typography variant="h6">Add New Question</Typography>
       <TextField
         fullWidth
         label="New question prompt"
@@ -64,8 +65,9 @@ function AddQuestionForm({ onAdd }) {
           setImageUrl("");
           setAdditionalInfo("");
         }}
+        sx={{ alignSelf: "flex-start" }}
       >
-        Add
+        Add Question
       </Button>
     </Stack>
   );
@@ -233,11 +235,7 @@ export default function SwipeQuiz({ adminMode }) {
   return (
     <Box sx={{ userSelect: "none", touchAction: "pan-y" }}>
       {adminMode && (
-        <Stack
-          direction="row"
-          justifyContent="flex-end"
-          sx={{ mb: 2 }}
-        >
+        <Stack direction="row" justifyContent="flex-end" sx={{ mb: 2 }}>
           <Button size="small" onClick={() => setShowAdmin((v) => !v)}>
             {showAdmin ? "Close Admin" : "Admin"}
           </Button>
@@ -267,7 +265,15 @@ export default function SwipeQuiz({ adminMode }) {
         </Box>
       )}
       {!showAdmin && current && (
-        <Box sx={{ position: "relative", height: 300, width: 300, mx: "auto" }}>
+        <Box
+          sx={{
+            position: "relative",
+            height: 280,
+            width: 280,
+            mx: "auto",
+            mt: 1,
+          }}
+        >
           <Card
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
@@ -292,8 +298,8 @@ export default function SwipeQuiz({ adminMode }) {
                 }}
               />
             )}
-            <CardContent sx={{ position: "relative" }}>
-              <Typography variant="body1" sx={{ mb: 2 }}>
+            <CardContent sx={{ position: "relative", pointerEvents: "none" }}>
+              <Typography variant="body1" sx={{ mb: 2, pointerEvents: "none" }}>
                 <strong>Question {index + 1}:</strong> {current.prompt}
               </Typography>
               <Box
@@ -302,26 +308,41 @@ export default function SwipeQuiz({ adminMode }) {
                   justifyContent: "space-between",
                   color: "text.secondary",
                   alignItems: "center",
+                  pointerEvents: "none",
                 }}
               >
-                <Stack direction="row" spacing={1} alignItems="center">
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  alignItems="center"
+                  sx={{ pointerEvents: "none" }}
+                >
                   <ArrowBackIosNewIcon
                     color={prevAnswer === false ? "error" : "inherit"}
+                    sx={{ pointerEvents: "none" }}
                   />
                   <Typography
                     color={prevAnswer === false ? "error" : "inherit"}
+                    sx={{ pointerEvents: "none" }}
                   >
                     No
                   </Typography>
                 </Stack>
-                <Stack direction="row" spacing={1} alignItems="center">
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  alignItems="center"
+                  sx={{ pointerEvents: "none" }}
+                >
                   <Typography
                     color={prevAnswer === true ? "success" : "inherit"}
+                    sx={{ pointerEvents: "none" }}
                   >
                     Yes
                   </Typography>
                   <ArrowForwardIosIcon
                     color={prevAnswer === true ? "success" : "inherit"}
+                    sx={{ pointerEvents: "none" }}
                   />
                 </Stack>
               </Box>
@@ -339,6 +360,7 @@ export default function SwipeQuiz({ adminMode }) {
                   bgcolor: prevAnswer ? "success.main" : "error.main",
                   color: "common.white",
                   zIndex: 1,
+                  pointerEvents: "none",
                 }}
               >
                 Previously answered: {prevAnswer ? "Yes" : "No"}
@@ -360,6 +382,7 @@ export default function SwipeQuiz({ adminMode }) {
               textShadow:
                 "3px 3px 0px #000, -3px -3px 0px #000, 3px -3px 0px #000, -3px 3px 0px #000, 0 0 12px rgba(0,0,0,0.9)",
               zIndex: 1,
+              pointerEvents: "none",
             }}
             style={{
               transform: `translate(-50%, -50%) scale(${1 + noOpacity * 0.3})`,
@@ -382,6 +405,7 @@ export default function SwipeQuiz({ adminMode }) {
               textShadow:
                 "3px 3px 0px #000, -3px -3px 0px #000, 3px -3px 0px #000, -3px 3px 0px #000, 0 0 12px rgba(0,0,0,0.9)",
               zIndex: 1,
+              pointerEvents: "none",
             }}
             style={{
               transform: `translate(-50%, -50%) scale(${1 + yesOpacity * 0.3})`,
@@ -461,9 +485,9 @@ export default function SwipeQuiz({ adminMode }) {
             {questions.map((q, idx) => (
               <Stack
                 key={q.id}
-                spacing={1}
-                direction={{ xs: "column", sm: "row" }}
-                alignItems={{ sm: "center" }}
+                spacing={2}
+                direction="column"
+                sx={{ mb: 3, p: 2, border: "1px solid", borderColor: "divider", borderRadius: 1 }}
               >
                 <TextField
                   fullWidth
@@ -507,7 +531,7 @@ export default function SwipeQuiz({ adminMode }) {
                   multiline
                   rows={2}
                 />
-                <Stack direction="row" spacing={1}>
+                <Stack direction="row" spacing={1} justifyContent="flex-end">
                   <Button
                     size="small"
                     variant="contained"
@@ -532,9 +556,18 @@ export default function SwipeQuiz({ adminMode }) {
       <Dialog
         open={infoDialog.open}
         onClose={() => setInfoDialog({ open: false, content: "" })}
+        maxWidth={false}
+        sx={{
+          "& .MuiDialog-paper": {
+            maxHeight: "500px",
+            maxWidth: "320px",
+            margin: "16px",
+            width: "320px",
+          },
+        }}
       >
         <DialogTitle>Why are we asking this?</DialogTitle>
-        <DialogContent>
+        <DialogContent sx={{ overflow: "auto" }}>
           <Typography>{infoDialog.content}</Typography>
         </DialogContent>
         <DialogActions>

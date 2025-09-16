@@ -23,48 +23,45 @@ export default function App() {
   const [showUserDetails, setShowUserDetails] = useState(false);
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
+    <Box sx={{ height: "100%", bgcolor: "background.default", display: "flex", flexDirection: "column" }}>
       <AppBar position="static">
-        <Toolbar>
-          <Typography
-            variant="h6"
-            component="div"
-            onClick={() => {
-              setAdminClicks((c) => {
-                const next = c + 1;
-                if (next >= 7) {
-                  setAdminMode(true);
-                }
-                return next;
-              });
-              setShowUserDetails(false);
-            }}
-            sx={{ cursor: "default", flexGrow: 1 }}
-          >
-            Have Your Say
-          </Typography>
-          <IconButton
-            color="inherit"
-            onClick={() => setShowUserDetails(true)}
-            sx={{ mr: 1 }}
-          >
-            <PersonIcon />
-          </IconButton>
-          {adminMode && (
+        <Toolbar sx={{ flexDirection: "column", alignItems: "stretch", py: 1 }}>
+          <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
             <Typography
-              sx={{ ml: 2 }}
-              variant="caption"
-              onClick={() => setAdminMode((v) => !v)}
+              variant="h6"
+              component="div"
+              onClick={() => {
+                setAdminClicks((c) => {
+                  const next = c + 1;
+                  if (next >= 7) {
+                    setAdminMode(true);
+                  }
+                  return next;
+                });
+                setShowUserDetails(false);
+              }}
+              sx={{ cursor: "pointer", flexGrow: 1 }}
             >
-              Admin mode
+              Have Your Say
             </Typography>
-          )}
-        </Toolbar>
-      </AppBar>
-
-      <Container maxWidth="sm" sx={{ py: 3 }}>
-        {!showUserDetails && (
-          <Paper elevation={1} sx={{ mb: 2 }}>
+            <IconButton
+              color="inherit"
+              onClick={() => setShowUserDetails(true)}
+              sx={{ mr: 1 }}
+            >
+              <PersonIcon />
+            </IconButton>
+            {adminMode && (
+              <Typography
+                sx={{ ml: 2 }}
+                variant="caption"
+                onClick={() => setAdminMode((v) => !v)}
+              >
+                Admin mode
+              </Typography>
+            )}
+          </Box>
+          {!showUserDetails && (
             <Tabs
               value={tab}
               onChange={(_, v) => {
@@ -72,13 +69,25 @@ export default function App() {
                 if (v === 1) setAreaRefresh((c) => c + 1);
               }}
               variant="fullWidth"
+              sx={{ 
+                "& .MuiTab-root": { 
+                  color: "rgba(255, 255, 255, 0.7)",
+                  minHeight: 32,
+                  padding: "6px 12px"
+                },
+                "& .Mui-selected": {
+                  color: "white"
+                }
+              }}
             >
               <Tab label="Your Answers" />
               <Tab label="Your Area" />
             </Tabs>
-          </Paper>
-        )}
+          )}
+        </Toolbar>
+      </AppBar>
 
+      <Container maxWidth={false} sx={{ py: 2, px: 2, flex: 1, overflow: "auto" }}>
         {showUserDetails && <UserDetails />}
 
         {!showUserDetails && tab === 0 && <SwipeQuiz adminMode={adminMode} />}

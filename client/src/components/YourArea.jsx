@@ -103,7 +103,7 @@ export default function YourArea({ refreshKey }) {
                 sx={{
                   position: "relative",
                   height: 16,
-                  width: 200,
+                  width: 160,
                   bgcolor: "error.main",
                   borderRadius: 1,
                   overflow: "hidden",
