@@ -29,7 +29,6 @@ Ports: server `http://localhost:4000`, client `http://localhost:5173`.
 - Swipe quiz: answer boolean questions by dragging card left/right; stored per user
 
 ### Notes
-- Adjust CORS by setting `CLIENT_ORIGIN` env var for the server if needed.
 - Data is stored in SQLite `database/contacts.db` (users, questions, answers). A random `userId` is generated and stored in `localStorage`.
 
 
