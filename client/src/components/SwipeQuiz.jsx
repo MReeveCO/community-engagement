@@ -440,7 +440,7 @@ export default function SwipeQuiz({ adminMode }) {
                 setDrag({ active: false, startX: 0, dx: 0 });
               }}
             >
-              Skip
+              {prevAnswer !== undefined ? "Next" : "Skip"}
             </Button>
           </Box>
         </Box>
